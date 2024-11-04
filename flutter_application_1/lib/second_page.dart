@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'elder_page.dart';
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,23 +41,6 @@ class SecondPage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-class ElderPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Second Page')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigate back to the first page
-            Navigator.pop(context);
-          },
-          child: Text('Back to Home Page'),
         ),
       ),
     );

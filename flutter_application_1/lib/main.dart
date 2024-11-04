@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'elder_page.dart' as app1;
 import 'second_page.dart' as app2;
 
 void main() {
