@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/student_page.dart';
 import 'elder_page.dart';
 class SecondPage extends StatelessWidget {
   @override
@@ -29,8 +30,10 @@ class SecondPage extends StatelessWidget {
             const SizedBox(height: 75), // Space between buttons
             ElevatedButton(
               onPressed: () {
-                // Action for Button 2
-                print("Button 2 pressed");
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => StudentPage()),
+                  );
               },
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 50),
