@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/main.dart';
 import 'second_page.dart' as app2;
 import 'elder_page_profile.dart';
 import 'elder_page_schedule.dart';
 import 'elder_page_location.dart';
 import 'elder_page_help.dart';
 import 'elder_page_opening_hours.dart';
+
 class ElderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,7 @@ class ElderPage extends StatelessWidget {
                     child: createIconButton(
                       'assets/24-7.png',
                       'Opening Hours',
-                      () => goButton(context, app2.SecondPage()))), ),
+                      () => goButton(context, ElderPageOpeningHours()))), ),
                 Padding(
                   padding: const EdgeInsets.all(10),
                   child: Align(
@@ -61,7 +63,7 @@ class ElderPage extends StatelessWidget {
                     child: createIconButton(
                       'assets/location.png',
                       'Location',
-                      () => goButton(context, app2.SecondPage())),)
+                      () => goButton(context, ElderPageLocations())),)
                   ),],),
               Row (
               children: [
