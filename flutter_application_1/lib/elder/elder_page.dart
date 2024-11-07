@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
-import 'second_page.dart' as app2;
+import '../second_page.dart' as app2;
 import 'elder_page_profile.dart';
 import 'elder_page_schedule.dart';
 import 'elder_page_location.dart';

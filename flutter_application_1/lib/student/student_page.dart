@@ -35,6 +35,24 @@ class StudentPage extends StatelessWidget {
                     () => goButton(context, ElderPageSchedule())),
                   )
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(top:10, right:10),
+                  child: Center(
+                    child: buildIconButton(
+                    'assets/calendar.png',
+                    'Schedule Time',
+                    () => goButton(context, ElderPageSchedule())),
+                  )
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top:10, right:10),
+                  child: Center(
+                    child: buildIconButton(
+                    'assets/calendar.png',
+                    'Schedule Time',
+                    () => goButton(context, ElderPageSchedule())),
+                  )
+                ),
               ],
             ),
           ),

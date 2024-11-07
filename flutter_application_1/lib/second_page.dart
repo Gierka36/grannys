@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/student_page.dart';
-import 'elder_page.dart';
+import 'package:flutter_application_1/student/student_page.dart';
+import 'elder/elder_page.dart';
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
