@@ -3,27 +3,52 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 
 class ElderPageSchedule extends StatefulWidget {
   @override
-  _CalendarPageState createState() => _CalendarPageState();
+  _ElderPageScheduleState createState() => _ElderPageScheduleState();
 }
 
-class _CalendarPageState extends State<ElderPageSchedule> {
+class _ElderPageScheduleState extends State<ElderPageSchedule> {
   DateTime _currentDate = DateTime.now();
+  TimeOfDay _selectedTime = TimeOfDay.now();
+  String? _selectedPerson;
+  
+  // List of people to select from
+  final List<String> _people = ['John Doe', 'Jane Smith', 'Mark Johnson'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendar Example'),
+        title: Text('Schedule Appointment'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView( // Wrapping in SingleChildScrollView for scrolling
+        child: SingleChildScrollView(
           child: Column(
-            
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Adding constraints or wrapping the calendar in a Container
+              // Dropdown for selecting a person
+              Text('Select Person:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              DropdownButton<String>(
+                isExpanded: true,
+                value: _selectedPerson,
+                hint: Text('Choose a person'),
+                items: _people.map((person) {
+                  return DropdownMenuItem<String>(
+                    value: person,
+                    child: Text(person),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedPerson = newValue;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+
+              // Calendar for selecting a date
               Container(
-                height: 400, // You can adjust the height as needed
+                height: 400,
                 child: CalendarCarousel(
                   onDayPressed: (DateTime date, List events) {
                     setState(() {
@@ -37,9 +62,42 @@ class _CalendarPageState extends State<ElderPageSchedule> {
                   showOnlyCurrentMonthDate: false,
                 ),
               ),
-              SizedBox(height: 20), // Add space between the calendar and the selected day text
+              SizedBox(height: 20),
+
+              // Time picker for selecting a time
+              Text('Select Time:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              ElevatedButton(
+                onPressed: () async {
+                  TimeOfDay? pickedTime = await showTimePicker(
+                    context: context,
+                    initialTime: _selectedTime,
+                  );
+                  if (pickedTime != null && pickedTime != _selectedTime) {
+                    setState(() {
+                      _selectedTime = pickedTime;
+                    });
+                  }
+                },
+                child: Text('Pick Time'),
+              ),
+              SizedBox(height: 20),
+
+              // Display the selected person, date, and time
               Text(
-                'Selected Day: ${_currentDate.toLocal()}',
+                'Selected Schedule:',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Person: ${_selectedPerson ?? 'Not selected'}',
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                'Date: ${_currentDate.toLocal().toString().split(' ')[0]}',
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                'Time: ${_selectedTime.format(context)}',
                 style: TextStyle(fontSize: 16),
               ),
             ],

@@ -56,6 +56,14 @@ flutter:
   - assets/help-web-button.png
   - assets/back.png
   - assets/map.png
+  - assets/profiles.json
+  - assets/john.png
+  - assets/mary.png
+  - assets/frank.png
+  - assets/betty.png
+  - assets/george.png
+
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

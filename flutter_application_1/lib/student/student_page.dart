@@ -1,162 +1,146 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/student/schedule_meeting.dart';
+import 'package:flutter_application_1/student/student_page_grandmas.dart';
 import 'package:flutter_application_1/student/student_page_info.dart';
 import 'package:flutter_application_1/student/student_page_settings.dart';
-import 'package:flutter_application_1/elder/elder_page_schedule.dart';
+import 'package:flutter_application_1/student/view_scheduled_meetings_page.dart';
 
-
-class StudentPage extends StatelessWidget {
-  const StudentPage({super.key});
-
-  @override
+class StudentPage1 extends StatelessWidget {
+@override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top:10, right:10),
-                  child: Center(
-                    child: buildIconButton(
-                    'assets/calendar.png',
-                    'Schedule Time',
-                    () => goButton(context, ElderPageSchedule())),
-                  )
+    return MaterialApp(
+      title: 'Icon Example',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Material Icons'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(top: 85, left: 40),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, right: 50),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: createIconButton(
+                        Icons.person,
+                        'Profile',
+                        () => goButton(context, Settings()),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: createIconButton(
+                        Icons.calendar_today, // Pass IconData instead of String
+                        'Schedule',
+                        () => goButton(context, ScheduleMeetingPage()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, right: 50),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: createIconButton(
+                          Icons.access_time, // Pass IconData instead of String
+                          'Opening Hours',
+                          () => goButton(context, ViewScheduledMeetingsPage()),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: createIconButton(
+                          Icons.location_on, // Pass IconData instead of String
+                          'Location',
+                          () => goButton(context, StudentPage()),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top:10, right:10),
-                  child: Center(
-                    child: buildIconButton(
-                    'assets/calendar.png',
-                    'Schedule Time',
-                    () => goButton(context, ElderPageSchedule())),
-                  )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10, right: 50),
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: createIconButton(
+                          Icons.help_outline, // Pass IconData instead of String
+                          'Help',
+                          () => goButton(context, InfoPage()),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: createIconButton(
+                          Icons.arrow_back, // Pass IconData instead of String
+                          'Go Back',
+                          () => goButton(context, MainScreen()),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top:10, right:10),
-                  child: Center(
-                    child: buildIconButton(
-                    'assets/calendar.png',
-                    'Schedule Time',
-                    () => goButton(context, ElderPageSchedule())),
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top:10, right:10),
-                  child: Center(
-                    child: buildIconButton(
-                    'assets/calendar.png',
-                    'Schedule Time',
-                    () => goButton(context, ElderPageSchedule())),
-                  )
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildCircleButton(
-                  icon: Icons.info,
-                  label: "Info",
-                  onTap: () {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => InfoPage()),);
-                  },
-                ),
-                _buildCircleButton(
-                  icon: Icons.home,
-                  label: "Home",
-                  onTap: () {
-                    Navigator.pop(context);
-                    print("Home button pressed");
-                  },
-                ),
-                _buildCircleButton(
-                  icon: Icons.settings,
-                  label: "Settings",
-                  onTap: () {
-                    Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Settings()),);
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget buildIconButton(String assetPath, String label, Function() onPressed) {
-  return Center(
-    child: Container(
-      width: double.infinity, // Take up the whole available width
-      margin: EdgeInsets.symmetric(horizontal: 16.0), // Padding from the edges
-      padding: EdgeInsets.all(16), // Internal padding
+  Widget createIconButton(IconData iconData, String label, VoidCallback onPressed) {
+    return Container(
+      width: 150,
+      height: 150,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black, width: 2), // Black border
         borderRadius: BorderRadius.circular(8), // Rounded corners
       ),
-      child: InkWell(
-        onTap: onPressed, // Call the provided function
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space label and icon
-          children: [
-            Text(
-              label,
-              style: TextStyle(fontSize: 16), // Customize label style if needed
-            ),
-            Image.asset(
-              assetPath, // Path to your PNG asset
-              height: 100, // Adjust icon size as needed
-              width: 100,  // Adjust icon size as needed
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-  Widget _buildCircleButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
+      padding: const EdgeInsets.all(16), // Padding around the content
       child: Column(
+        mainAxisSize: MainAxisSize.min, // Size the column to its content
         children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 6,
-                  offset: Offset(3, 3),
-                ),
-              ],
+          InkWell(
+            onTap: onPressed,
+            child: Icon(
+              iconData, // Use the provided icon data
+              size: 80, // Adjust icon size as needed
+              color: Colors.black, // Adjust icon color if needed
             ),
-            child: Icon(icon, size: 30,),
           ),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(fontSize: 14)),
+          const SizedBox(height: 10), // Space between icon and text
+          Text(label, style: const TextStyle(fontSize: 16)), // Display the label for the icon
         ],
       ),
     );
   }
-  
-  goButton(BuildContext context, ElderPageSchedule elderPageSchedule) {}
+
+  void goButton(BuildContext context, Widget page) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => page),
+    );
+  }
 }

@@ -43,6 +43,26 @@ class InfoPage extends StatelessWidget
             ),
             const SizedBox(height: 20),
 
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Working Hours',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+              child: Text(
+                'Monday-Friday 10:00-20:00'
+                'Saturday-Sunday 10:00-19:00',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 20),
+
             // Large text area
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0),

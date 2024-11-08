@@ -1,0 +1,38 @@
+[
+    {
+      "name": "John Doe",
+      "imagePath": "assets/john.png",
+      "skills": ["Gardening", "Cooking"],
+      "helpOffered": "Can help with gardening and meal preparation.",
+      "story": "John is a retired chef who loves sharing his skills with others."
+    },
+    {
+      "name": "Mary Smith",
+      "imagePath": "assets/mary.png",
+      "skills": ["Knitting", "Baking"],
+      "helpOffered": "Can assist with knitting and baking.",
+      "story": "Mary has a passion for baking and knitting warm clothes for others."
+    },
+    {
+        "name": "Frank Harris",
+        "imagePath": "assets/frank.png",
+        "skills": ["Woodworking", "Handyman"],
+        "helpOffered": "Can assist with minor home repairs and woodworking projects.",
+        "story": "Frank has been working with wood since he was young and loves creating beautiful, functional items."
+      },
+      {
+        "name": "Betty White",
+        "imagePath": "assets/betty.png",
+        "skills": ["Storytelling", "History Knowledge"],
+        "helpOffered": "Loves to share stories and teach about history.",
+        "story": "Betty is a former history teacher who enjoys sharing stories from the past with young people."
+      },
+      {
+        "name": "George Miller",
+        "imagePath": "assets/george.png",
+        "skills": ["Painting", "Sketching"],
+        "helpOffered": "Can offer painting and art classes.",
+        "story": "George is a retired artist who now teaches painting techniques to anyone interested in learning."
+      }
+  ]
+  

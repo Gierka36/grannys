@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/elder/elder_page_profile.dart';
+import 'package:flutter_application_1/elder/elder_page_schedule.dart';
+import 'package:flutter_application_1/elder/elder_page_location.dart';
+import 'package:flutter_application_1/elder/elder_page_help.dart';
+import 'package:flutter_application_1/elder/elder_page_opening_hours.dart';
 import 'package:flutter_application_1/main.dart';
-import '../second_page.dart' as app2;
-import 'elder_page_profile.dart';
-import 'elder_page_schedule.dart';
-import 'elder_page_location.dart';
-import 'elder_page_help.dart';
-import 'elder_page_opening_hours.dart';
 
 class ElderPage extends StatelessWidget {
   @override
@@ -82,7 +81,7 @@ class ElderPage extends StatelessWidget {
                     child: createIconButton(
                       'assets/back.png',
                       'Go Back',
-                      () => goButton(context, app2.SecondPage())),)
+                      () => goButton(context, MainScreen())),)
                   ),
                   
               
