@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
+import 'package:intl/intl.dart';
 
 class ElderPageSchedule extends StatefulWidget {
   @override
@@ -10,9 +11,49 @@ class _ElderPageScheduleState extends State<ElderPageSchedule> {
   DateTime _currentDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
   String? _selectedPerson;
-  
-  // List of people to select from
-  final List<String> _people = ['John Doe', 'Jane Smith', 'Mark Johnson'];
+
+  // Define the current user (example: 'John Doe')
+  final String currentUser = 'John Doe';
+
+  // List of scheduled meetings
+  final List<Map<String, String>> _scheduledMeetings = [
+    {
+      'person': 'John Doe', // This should be replaced with 'You' for the current user
+      'activity': 'Cooking',
+      'date': '2024-11-09',
+      'time': '10:00 AM',
+    },
+    {
+      'person': 'Jane Smith',
+      'activity': 'Fixing Tools',
+      'date': '2024-11-10',
+      'time': '02:00 PM',
+    },
+    // Add more meetings as needed
+  ];
+
+  List<Map<String, String>> _filteredMeetings = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _filterMeetingsForDate(_currentDate); // Filter meetings for the default date
+  }
+
+  // Filter meetings based on the selected date
+  void _filterMeetingsForDate(DateTime selectedDate) {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+    setState(() {
+      _filteredMeetings = _scheduledMeetings
+          .where((meeting) => meeting['date'] == formattedDate)
+          .toList();
+    });
+  }
+
+  // Replace the current user's name with "You"
+  String _getDisplayName(String person) {
+    return person == currentUser ? 'You' : person;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,26 +67,6 @@ class _ElderPageScheduleState extends State<ElderPageSchedule> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Dropdown for selecting a person
-              Text('Select Person:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              DropdownButton<String>(
-                isExpanded: true,
-                value: _selectedPerson,
-                hint: Text('Choose a person'),
-                items: _people.map((person) {
-                  return DropdownMenuItem<String>(
-                    value: person,
-                    child: Text(person),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedPerson = newValue;
-                  });
-                },
-              ),
-              SizedBox(height: 20),
-
               // Calendar for selecting a date
               Container(
                 height: 400,
@@ -54,6 +75,7 @@ class _ElderPageScheduleState extends State<ElderPageSchedule> {
                     setState(() {
                       _currentDate = date;
                     });
+                    _filterMeetingsForDate(date); // Filter meetings based on selected date
                   },
                   thisMonthDayBorderColor: Colors.grey,
                   selectedDayButtonColor: Colors.green,
@@ -64,42 +86,25 @@ class _ElderPageScheduleState extends State<ElderPageSchedule> {
               ),
               SizedBox(height: 20),
 
-              // Time picker for selecting a time
-              Text('Select Time:', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              ElevatedButton(
-                onPressed: () async {
-                  TimeOfDay? pickedTime = await showTimePicker(
-                    context: context,
-                    initialTime: _selectedTime,
+              // Display meetings for the selected date
+              if (_filteredMeetings.isEmpty)
+                Text(
+                  'No meetings scheduled for this day.',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                )
+              else
+                ..._filteredMeetings.map((meeting) {
+                  return Card(
+                    margin: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      title: Text('Meeting with ${_getDisplayName(meeting['person']!)}'),
+                      subtitle: Text(
+                          '${meeting['activity']} at ${meeting['time']}'),
+                    ),
                   );
-                  if (pickedTime != null && pickedTime != _selectedTime) {
-                    setState(() {
-                      _selectedTime = pickedTime;
-                    });
-                  }
-                },
-                child: Text('Pick Time'),
-              ),
-              SizedBox(height: 20),
+                }).toList(),
 
-              // Display the selected person, date, and time
-              Text(
-                'Selected Schedule:',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Text(
-                'Person: ${_selectedPerson ?? 'Not selected'}',
-                style: TextStyle(fontSize: 16),
-              ),
-              Text(
-                'Date: ${_currentDate.toLocal().toString().split(' ')[0]}',
-                style: TextStyle(fontSize: 16),
-              ),
-              Text(
-                'Time: ${_selectedTime.format(context)}',
-                style: TextStyle(fontSize: 16),
-              ),
+              // Other UI elements for selecting person, time, etc.
             ],
           ),
         ),

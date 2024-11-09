@@ -49,14 +49,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-  - assets/user.png 
-  - assets/calendar.png
-  - assets/24-7.png
-  - assets/location.png
-  - assets/help-web-button.png
-  - assets/back.png
   - assets/map.png
-  - assets/profiles.json
   - assets/john.png
   - assets/mary.png
   - assets/frank.png
