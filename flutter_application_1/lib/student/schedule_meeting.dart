@@ -1,49 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:intl/intl.dart'; // For formatting the date
-import 'elderly_profile.dart'; // Import ElderlyProfile model
+import 'package:intl/intl.dart';
+import 'package:flutter_application_1/student/view_scheduled_meetings_page.dart'; // Import the ViewScheduledMeetingsPage
 
 class ScheduleMeetingPage extends StatefulWidget {
-  const ScheduleMeetingPage({Key? key}) : super(key: key);
+  final Function(Map<String, String>) onMeetingScheduled;
+
+  const ScheduleMeetingPage({Key? key, required this.onMeetingScheduled}) : super(key: key);
 
   @override
   _ScheduleMeetingPageState createState() => _ScheduleMeetingPageState();
 }
 
 class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
-  final List<ElderlyProfile> profiles = [
-    ElderlyProfile(
-      name: 'John Doe',
-      imagePath: 'assets/john.png',
-      skills: ['Gardening', 'Cooking'],
-      helpOffered: 'Can help with gardening and meal preparation.',
-      story: 'John is a retired chef who loves sharing his skills with others.',
-    ),
-    ElderlyProfile(
-      name: 'Mary Smith',
-      imagePath: 'assets/mary.png',
-      skills: ['Knitting', 'Baking'],
-      helpOffered: 'Can assist with knitting and baking.',
-      story: 'Mary has a passion for baking and knitting warm clothes for others.',
-    ),
-    // Add more profiles as needed
-  ];
-
-  late ElderlyProfile selectedProfile;
+  String selectedPerson = 'John Doe'; // Add default selected person
   String selectedActivity = 'Cooking';
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
-  // Define a list of activities to choose from
+  // Sample list of people with images
+  final List<Map<String, String>> people = [
+    {'name': 'John Doe', 'image': 'assets/john.png'}, 
+    {'name': 'Jane Smith', 'image': 'assets/betty.png'},
+    {'name': 'Mark Twain', 'image': 'assets/frank.png'}
+  ];
+  
   final List<String> activities = ['Cooking', 'Fixing Tools', 'Learning Danish', 'Learning Knitting'];
 
-  @override
-  void initState() {
-    super.initState();
-    selectedProfile = profiles[0]; // Default to the first profile
-  }
+  // List to store scheduled meetings
+  List<Map<String, String>> scheduledMeetings = [];
 
-  // Show a DatePicker to select the meeting date
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -58,7 +43,6 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
     }
   }
 
-  // Show a TimePicker to select the meeting time
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -71,26 +55,30 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
     }
   }
 
-  // Method to schedule a meeting
   void _scheduleMeeting() {
     final String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
     final String formattedTime = selectedTime.format(context);
 
-    // Print out or save the meeting details
-    print('Scheduled Meeting Details:');
-    print('Person: ${selectedProfile.name}');
-    print('Activity: $selectedActivity');
-    print('Date: $formattedDate');
-    print('Time: $formattedTime');
+    final Map<String, String> meeting = {
+      'person': selectedPerson,
+      'activity': selectedActivity,
+      'date': formattedDate,
+      'time': formattedTime,
+    };
 
-    // Show a confirmation dialog
+    // Call the parent callback to update the state in StudentPage1
+    widget.onMeetingScheduled(meeting);
+
+    setState(() {
+      scheduledMeetings.add(meeting);
+    });
+
+    // Show confirmation dialog
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Meeting Scheduled'),
-        content: Text(
-          'You have scheduled a meeting with ${selectedProfile.name} to $selectedActivity on $formattedDate at $formattedTime.',
-        ),
+        content: Text('Scheduled: $selectedActivity with $selectedPerson on $formattedDate at $formattedTime.'),
         actions: [
           TextButton(
             onPressed: () {
@@ -113,25 +101,26 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Profile dropdown
-            DropdownButton<ElderlyProfile>(
-              value: selectedProfile,
-              onChanged: (ElderlyProfile? newValue) {
+            // Person dropdown
+            DropdownButton<String>(
+              value: selectedPerson,
+              onChanged: (String? newValue) {
                 setState(() {
-                  selectedProfile = newValue!;
+                  selectedPerson = newValue!;
                 });
               },
-              items: profiles.map<DropdownMenuItem<ElderlyProfile>>((ElderlyProfile profile) {
-                return DropdownMenuItem<ElderlyProfile>(
-                  value: profile,
+              items: people.map<DropdownMenuItem<String>>((person) {
+                return DropdownMenuItem<String>(
+                  value: person['name']!,
                   child: Row(
                     children: [
+                      // Add an image next to the person's name
                       CircleAvatar(
-                        backgroundImage: AssetImage(profile.imagePath),
-                        radius: 20,
+                        backgroundImage: AssetImage(person['image']!),
+                        radius: 16,
                       ),
                       const SizedBox(width: 10),
-                      Text(profile.name),
+                      Text(person['name']!),
                     ],
                   ),
                 );
@@ -180,13 +169,32 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
 
-            // Schedule button
+            // Button to schedule meeting
             ElevatedButton(
               onPressed: _scheduleMeeting,
               child: const Text('Schedule Meeting'),
             ),
+
+            // Display "View Scheduled Meetings" button if meetings are scheduled
+            if (scheduledMeetings.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to ViewScheduledMeetingsPage and pass meetings list
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewScheduledMeetingsPage(
+                        scheduledMeetings: scheduledMeetings, // Pass updated list
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('View Scheduled Meetings'),
+              ),
+            ],
           ],
         ),
       ),
