@@ -96,63 +96,92 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Schedule Meeting'),
+        backgroundColor: Color.fromARGB(255, 255, 228, 215), // Set AppBar background color to match the body background
+        foregroundColor: Colors.black, // Set AppBar text color to black for contrast
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             // Person dropdown
-            DropdownButton<String>(
-              value: selectedPerson,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedPerson = newValue!;
-                });
-              },
-              items: people.map<DropdownMenuItem<String>>((person) {
-                return DropdownMenuItem<String>(
-                  value: person['name']!,
-                  child: Row(
-                    children: [
-                      // Add an image next to the person's name
-                      CircleAvatar(
-                        backgroundImage: AssetImage(person['image']!),
-                        radius: 16,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(person['name']!),
-                    ],
-                  ),
-                );
-              }).toList(),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: DropdownButton<String>(
+                value: selectedPerson,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedPerson = newValue!;
+                  });
+                },
+                isExpanded: true, // Ensure the dropdown expands to fill the space
+                items: people.map<DropdownMenuItem<String>>((person) {
+                  return DropdownMenuItem<String>(
+                    value: person['name']!,
+                    child: Row(
+                      children: [
+                        // Add an image next to the person's name
+                        CircleAvatar(
+                          backgroundImage: AssetImage(person['image']!),
+                          radius: 24, // Increase size of the image
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          person['name']!,
+                          style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                style: TextStyle(fontSize: 18, color: Colors.black), // Set dropdown text color to black
+                dropdownColor: Colors.white,
+              ),
             ),
             const SizedBox(height: 16),
 
             // Activity dropdown
-            DropdownButton<String>(
-              value: selectedActivity,
-              onChanged: (String? newValue) {
-                setState(() {
-                  selectedActivity = newValue!;
-                });
-              },
-              items: activities.map<DropdownMenuItem<String>>((String activity) {
-                return DropdownMenuItem<String>(
-                  value: activity,
-                  child: Text(activity),
-                );
-              }).toList(),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: DropdownButton<String>(
+                value: selectedActivity,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedActivity = newValue!;
+                  });
+                },
+                isExpanded: true, // Ensure the dropdown expands to fill the space
+                items: activities.map<DropdownMenuItem<String>>((String activity) {
+                  return DropdownMenuItem<String>(
+                    value: activity,
+                    child: Text(
+                      activity,
+                      style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+                    ),
+                  );
+                }).toList(),
+                style: TextStyle(fontSize: 18, color: Colors.black), // Set dropdown text color to black
+                dropdownColor: Colors.white,
+              ),
             ),
             const SizedBox(height: 16),
 
             // Date selection
             Row(
               children: [
-                const Text('Select Date:'),
+                const Text(
+                  'Select Date:',
+                  style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+                ),
                 const SizedBox(width: 10),
                 TextButton(
                   onPressed: () => _selectDate(context),
-                  child: Text(DateFormat('yyyy-MM-dd').format(selectedDate)),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0), // Increase button size
+                  ),
+                  child: Text(
+                    DateFormat('yyyy-MM-dd').format(selectedDate),
+                    style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+                  ),
                 ),
               ],
             ),
@@ -161,11 +190,20 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
             // Time selection
             Row(
               children: [
-                const Text('Select Time:'),
+                const Text(
+                  'Select Time:',
+                  style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+                ),
                 const SizedBox(width: 10),
                 TextButton(
                   onPressed: () => _selectTime(context),
-                  child: Text(selectedTime.format(context)),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0), // Increase button size
+                  ),
+                  child: Text(
+                    selectedTime.format(context),
+                    style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+                  ),
                 ),
               ],
             ),
@@ -174,6 +212,10 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
             // Button to schedule meeting
             ElevatedButton(
               onPressed: _scheduleMeeting,
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0), // Increase button size
+                textStyle: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+              ),
               child: const Text('Schedule Meeting'),
             ),
 
@@ -192,6 +234,10 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
                     ),
                   );
                 },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0), // Increase button size
+                  textStyle: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+                ),
                 child: const Text('View Scheduled Meetings'),
               ),
             ],

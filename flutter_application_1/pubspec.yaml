@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_calendar_carousel: ^2.4.4
+  http: ^0.13.3 
 
 dev_dependencies:
   flutter_test:
@@ -55,6 +56,14 @@ flutter:
   - assets/frank.png
   - assets/betty.png
   - assets/george.png
+  - assets/profiles.json
+  - assets/students.json
+  - assets/student1.png
+  - assets/student2.png
+  - assets/student3.png
+  - assets/student4.png
+  - assets/student5.png
+  - assets/student6.png
 
 
 

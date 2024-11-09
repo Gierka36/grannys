@@ -1,66 +1,66 @@
 import 'package:flutter/material.dart';
 
 // Model for Person
-class Person {
+class Student {
   final String name;
   final String imagePath;
   
-  Person({
+  Student({
     required this.name,
     required this.imagePath,
   });
 
   // Factory constructor to create a Person from JSON-like data
-  factory Person.fromJson(Map<String, dynamic> json) {
-    return Person(
+  factory Student.fromJson(Map<String, dynamic> json) {
+    return Student(
       name: json['name'],
       imagePath: json['imagePath'],
     );
   }
 }
 
-class ChatPage extends StatefulWidget {
+class ElderChatPage extends StatefulWidget {
   @override
   _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageState extends State<ElderChatPage> {
   TextEditingController _controller = TextEditingController();
   List<Map<String, String>> _messages = []; // Store messages along with sender info
-  Person? _selectedPerson;
+  Student? _selectedPerson;
 
   // Sample JSON data for people
   final List<Map<String, dynamic>> _peopleData = [
     {
-      "name": "John Doe",
-      "imagePath": "assets/john.png",
+      "name": "Sarah Johnson",
+      "imagePath": "assets/student5.png",
     },
     {
-      "name": "Mary Smith",
-      "imagePath": "assets/mary.png",
+      "name": "Michael Lee",
+      "imagePath": "assets/student1.png",
     },
     {
-      "name": "Frank Harris",
-      "imagePath": "assets/frank.png",
+      "name": "Emily Williams",
+      "imagePath": "assets/student6.png",
     },
     {
-      "name": "Betty White",
-      "imagePath": "assets/betty.png",
+      "name": "David Brown",
+      "imagePath": "assets/student2.png",
     },
     {
-      "name": "George Miller",
-      "imagePath": "assets/george.png",
+      "name": "Laura Davis",
+      "imagePath": "assets/student4.png",
     },
   ];
 
   // List of Person objects
-  List<Person> _people = [];
+  List<Student> _people = [];
 
   @override
   void initState() {
     super.initState();
     // Convert the sample data to Person objects
-    _people = _peopleData.map((personData) => Person.fromJson(personData)).toList();
+    _people = _peopleData.map((personData) => Student.fromJson(personData)).toList();
 
     // Show dialog to select person as soon as the page is loaded
     WidgetsBinding.instance.addPostFrameCallback((_) {

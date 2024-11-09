@@ -83,7 +83,7 @@ class ElderPageState extends State<ElderPageProfile> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Profile', style: TextStyle(fontSize: 24)),
-        backgroundColor: Colors.green,
+        backgroundColor: Color.fromARGB(255, 255, 228, 215),
       ),
       body: Center( // Wrap everything in a Center widget
         child: Padding(
@@ -125,14 +125,24 @@ class ElderPageState extends State<ElderPageProfile> {
                 SizedBox(height: 30),
 
                 // Edit Profile Button
-                ElevatedButton(
-                  onPressed: _editProfile,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(200, 60),
-                    textStyle: TextStyle(fontSize: 20),
-                    backgroundColor: Colors.green, // Corrected property
-                  ),
-                  child: Text('Edit Profile'),
+               ElevatedButton(
+  onPressed: _editProfile,
+  style: ElevatedButton.styleFrom(
+    minimumSize: Size(200, 60),
+    textStyle: TextStyle(fontSize: 20),
+    backgroundColor: Color.fromARGB(255, 255, 206, 184),
+  ).copyWith(
+    shape: MaterialStateProperty.all(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30), // Adjust corner radius
+        side: BorderSide(
+          color: Color.fromARGB(255, 253, 193, 164), // Border color
+          width: 4, // Border width
+        ),
+      ),
+    ),
+  ),
+  child: Text("Edit Profile"), // Button text
                 ),
               ],
             ),

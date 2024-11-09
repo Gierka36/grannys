@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-
-class InfoPage extends StatelessWidget
-{
+class InfoPage extends StatelessWidget {
   const InfoPage({super.key});
 
   @override
@@ -10,16 +8,16 @@ class InfoPage extends StatelessWidget
     return Scaffold(
       appBar: AppBar(
         title: const Text('Community information'),
+        backgroundColor: const Color.fromARGB(255, 255, 228, 215), // Set the background color here
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            
             Center(
-              child: Padding(padding: const EdgeInsets.all(10),
-              child: Image.asset('assets/map.png', height: 300, width: 300,),
-              
+              child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Image.asset('assets/map.png', height: 300, width: 300),
               ),
             ),
             const SizedBox(height: 20),
@@ -96,5 +94,3 @@ class InfoPage extends StatelessWidget
     );
   }
 }
-
-  

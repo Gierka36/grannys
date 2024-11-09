@@ -1,0 +1,38 @@
+[
+    {
+      "name": "Sarah Johnson",
+      "imagePath": "assets/student5.png",
+      "skills": ["Photography", "Graphic Design"],
+      "helpOffered": "Can assist with photography and creating digital artwork.",
+      "story": "Sarah is an art student with a passion for capturing the beauty of everyday life through her camera lens. She loves to help others bring their ideas to life with design."
+    },
+    {
+      "name": "Michael Lee",
+      "imagePath": "assets/student1.png",
+      "skills": ["Coding", "Web Development"],
+      "helpOffered": "Can help with coding, building websites, and debugging.",
+      "story": "Michael is a computer science major who enjoys problem-solving and teaching others how to create their own websites and applications."
+    },
+    {
+      "name": "Emily Williams",
+      "imagePath": "assets/student6.png",
+      "skills": ["Tutoring", "Math"],
+      "helpOffered": "Can tutor in mathematics and help with homework.",
+      "story": "Emily is a math whiz and loves tutoring her peers. She enjoys breaking down complex problems into simple steps to make math more accessible."
+    },
+    {
+      "name": "David Brown",
+      "imagePath": "assets/student2.png",
+      "skills": ["Cooking", "Nutrition"],
+      "helpOffered": "Can teach basic cooking skills and share nutrition tips.",
+      "story": "David is a culinary student who is passionate about healthy eating. He enjoys teaching others how to cook simple, nutritious meals on a budget."
+    },
+    {
+      "name": "Laura Davis",
+      "imagePath": "assets/student4.png",
+      "skills": ["Writing", "Editing"],
+      "helpOffered": "Can assist with writing essays, editing, and proofreading.",
+      "story": "Laura is an English major who loves to help her peers express their ideas through writing. She enjoys polishing drafts and improving writing skills."
+    }
+  ]
+  

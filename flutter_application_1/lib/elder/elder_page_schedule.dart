@@ -59,7 +59,8 @@ class _ElderPageScheduleState extends State<ElderPageSchedule> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Schedule Appointment'),
+        title: Text('Schedule'),
+        backgroundColor: Color.fromARGB(255, 255, 228, 215),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
