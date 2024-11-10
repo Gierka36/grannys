@@ -32,6 +32,7 @@ class _StudentPageState extends State<StudentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Student Page'),
       ),
       body: profiles.isEmpty

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+// Assuming MainScreen is the screen to navigate to when logged out.
+import 'package:flutter_application_1/main.dart';  // Import your main screen here
+
 class Settings extends StatefulWidget {
   @override
   SettingsPageState createState() => SettingsPageState();
@@ -79,10 +82,19 @@ class SettingsPageState extends State<Settings> {
     );
   }
 
+  // Function to handle logout and navigate to MainScreen
+  void _logout() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => MainScreen()),  // Replace MainScreen with your actual screen
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('Profile', style: TextStyle(fontSize: 24)),
         backgroundColor: Color.fromARGB(255, 255, 228, 215),
       ),
@@ -139,6 +151,19 @@ class SettingsPageState extends State<Settings> {
                     textStyle: TextStyle(fontSize: 20),// Corrected property
                   ),
                   child: Text('Edit Profile'),
+                ),
+                
+                SizedBox(height: 20), // Space between buttons
+                
+                // Logout Button
+                ElevatedButton(
+                  onPressed: _logout,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(200, 50), // Smaller size
+                    backgroundColor: Colors.red, // Red background color
+                    textStyle: TextStyle(fontSize: 18, color: Colors.white), // White text color
+                  ),
+                  child: Text('Logout'),
                 ),
               ],
             ),

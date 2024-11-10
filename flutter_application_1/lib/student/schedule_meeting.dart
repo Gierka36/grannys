@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_application_1/student/view_scheduled_meetings_page.dart'; // Import the ViewScheduledMeetingsPage
+import 'view_scheduled_meetings_page.dart'; // Import the ViewScheduledMeetingsPage
 
 class ScheduleMeetingPage extends StatefulWidget {
   final Function(Map<String, String>) onMeetingScheduled;
@@ -12,81 +12,107 @@ class ScheduleMeetingPage extends StatefulWidget {
 }
 
 class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
-  String selectedPerson = 'John Doe'; // Add default selected person
   String selectedActivity = 'Cooking';
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
 
-  // Sample list of people with images
-  final List<Map<String, String>> people = [
-    {'name': 'John Doe', 'image': 'assets/john.png'}, 
-    {'name': 'Jane Smith', 'image': 'assets/betty.png'},
-    {'name': 'Mark Twain', 'image': 'assets/frank.png'}
+  // Sample list of available times posted by elders
+  List<Map<String, String>> availableTimes = [
+    {'elder': 'John Doe', 'activity': 'Cooking', 'date': '2024-11-09', 'time': '10:00 AM'},
+    {'elder': 'Jane Smith', 'activity': 'Fixing Tools', 'date': '2024-11-10', 'time': '02:00 PM'},
+    {'elder': 'Mark Twain', 'activity': 'Learning Knitting', 'date': '2024-11-12', 'time': '09:00 AM'},
   ];
-  
-  final List<String> activities = ['Cooking', 'Fixing Tools', 'Learning Danish', 'Learning Knitting'];
 
-  // List to store scheduled meetings
+  // List to store meetings that the student has booked
   List<Map<String, String>> scheduledMeetings = [];
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: selectedTime,
-    );
-    if (picked != null && picked != selectedTime) {
-      setState(() {
-        selectedTime = picked;
-      });
-    }
-  }
-
-  void _scheduleMeeting() {
-    final String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
-    final String formattedTime = selectedTime.format(context);
-
-    final Map<String, String> meeting = {
-      'person': selectedPerson,
-      'activity': selectedActivity,
-      'date': formattedDate,
-      'time': formattedTime,
-    };
-
-    // Call the parent callback to update the state in StudentPage1
-    widget.onMeetingScheduled(meeting);
-
-    setState(() {
-      scheduledMeetings.add(meeting);
-    });
-
-    // Show confirmation dialog
+  void _showBookingDetails(Map<String, String> availableTime) {
+    // Show dialog with more information about the booking
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Meeting Scheduled'),
-        content: Text('Scheduled: $selectedActivity with $selectedPerson on $formattedDate at $formattedTime.'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('OK'),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Booking Details'),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Elder: ${availableTime['elder']}'),
+              Text('Activity: ${availableTime['activity']}'),
+              Text('Date: ${availableTime['date']}'),
+              Text('Time: ${availableTime['time']}'),
+            ],
           ),
-        ],
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Proceed with the booking
+                setState(() {
+                  // Remove the booked time slot from the available list
+                  availableTimes.remove(availableTime);
+                  // Add the meeting to the list of scheduled meetings, make sure 'elder' is included
+                  scheduledMeetings.add({
+                    'elder': availableTime['elder']!,
+                    'activity': availableTime['activity']!,
+                    'date': availableTime['date']!,
+                    'time': availableTime['time']!,
+                  });
+                });
+
+                // Call the parent callback to update the state in StudentPage1
+                widget.onMeetingScheduled({
+                  'elder': availableTime['elder']!,
+                  'activity': availableTime['activity']!,
+                  'date': availableTime['date']!,
+                  'time': availableTime['time']!,
+                });
+
+                Navigator.pop(context); // Close the dialog
+                // Show confirmation dialog or any other action
+                _showBookingConfirmation(availableTime);
+              },
+              child: const Text('Book Now'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showBookingConfirmation(Map<String, String> meeting) {
+    // Show confirmation dialog for the booked meeting
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Meeting Scheduled'),
+          content: Text(
+              'You have successfully scheduled a meeting with ${meeting['elder']} for ${meeting['activity']} on ${meeting['date']} at ${meeting['time']}'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _viewScheduledMeetings() {
+    // Navigate to ViewScheduledMeetingsPage and pass the scheduledMeetings list
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ViewScheduledMeetingsPage(scheduledMeetings: scheduledMeetings),
       ),
     );
   }
@@ -95,152 +121,41 @@ class _ScheduleMeetingPageState extends State<ScheduleMeetingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text('Schedule Meeting'),
-        backgroundColor: Color.fromARGB(255, 255, 228, 215), // Set AppBar background color to match the body background
-        foregroundColor: Colors.black, // Set AppBar text color to black for contrast
+        backgroundColor: Color.fromARGB(255, 255, 228, 215),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Person dropdown
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: DropdownButton<String>(
-                value: selectedPerson,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedPerson = newValue!;
-                  });
-                },
-                isExpanded: true, // Ensure the dropdown expands to fill the space
-                items: people.map<DropdownMenuItem<String>>((person) {
-                  return DropdownMenuItem<String>(
-                    value: person['name']!,
-                    child: Row(
-                      children: [
-                        // Add an image next to the person's name
-                        CircleAvatar(
-                          backgroundImage: AssetImage(person['image']!),
-                          radius: 24, // Increase size of the image
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          person['name']!,
-                          style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
-                        ),
-                      ],
+            Text('Available Times for You to Book:'),
+            if (availableTimes.isEmpty)
+              Text('No available times posted yet.')
+            else
+              ...availableTimes.map((time) {
+                return Card(
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    title: Text('${time['activity']} on ${time['date']} at ${time['time']}'),
+                    subtitle: Text('Elder: ${time['elder']}'),
+                    trailing: ElevatedButton(
+                      onPressed: () => _showBookingDetails(time),
+                      child: const Text('Book'),
                     ),
-                  );
-                }).toList(),
-                style: TextStyle(fontSize: 18, color: Colors.black), // Set dropdown text color to black
-                dropdownColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Activity dropdown
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: DropdownButton<String>(
-                value: selectedActivity,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedActivity = newValue!;
-                  });
-                },
-                isExpanded: true, // Ensure the dropdown expands to fill the space
-                items: activities.map<DropdownMenuItem<String>>((String activity) {
-                  return DropdownMenuItem<String>(
-                    value: activity,
-                    child: Text(
-                      activity,
-                      style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
-                    ),
-                  );
-                }).toList(),
-                style: TextStyle(fontSize: 18, color: Colors.black), // Set dropdown text color to black
-                dropdownColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // Date selection
-            Row(
-              children: [
-                const Text(
-                  'Select Date:',
-                  style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
-                ),
-                const SizedBox(width: 10),
-                TextButton(
-                  onPressed: () => _selectDate(context),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0), // Increase button size
                   ),
-                  child: Text(
-                    DateFormat('yyyy-MM-dd').format(selectedDate),
-                    style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
+                );
+              }).toList(),
 
-            // Time selection
-            Row(
-              children: [
-                const Text(
-                  'Select Time:',
-                  style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
+            // Show the "View Scheduled Meetings" button if there are booked meetings
+            if (scheduledMeetings.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: ElevatedButton(
+                  onPressed: _viewScheduledMeetings,
+                  child: const Text('View Scheduled Meetings'),
                 ),
-                const SizedBox(width: 10),
-                TextButton(
-                  onPressed: () => _selectTime(context),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0), // Increase button size
-                  ),
-                  child: Text(
-                    selectedTime.format(context),
-                    style: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-
-            // Button to schedule meeting
-            ElevatedButton(
-              onPressed: _scheduleMeeting,
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0), // Increase button size
-                textStyle: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
               ),
-              child: const Text('Schedule Meeting'),
-            ),
-
-            // Display "View Scheduled Meetings" button if meetings are scheduled
-            if (scheduledMeetings.isNotEmpty) ...[
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to ViewScheduledMeetingsPage and pass meetings list
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ViewScheduledMeetingsPage(
-                        scheduledMeetings: scheduledMeetings, // Pass updated list
-                      ),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 40.0), // Increase button size
-                  textStyle: TextStyle(fontSize: 18, color: Colors.black), // Set text color to black
-                ),
-                child: const Text('View Scheduled Meetings'),
-              ),
-            ],
           ],
         ),
       ),

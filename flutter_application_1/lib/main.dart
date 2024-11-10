@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Student Portal',
       theme: ThemeData(
-        scaffoldBackgroundColor: Color.fromARGB(255, 255, 228, 215), // Background color for the scaffold // Set primary color (you can customize as needed)
+        scaffoldBackgroundColor: Color.fromARGB(255, 255, 228, 215), // Background color for the scaffold
         buttonTheme: ButtonThemeData(
           buttonColor: Color(0xFF6E2C9), // Set button background color globally
           textTheme: ButtonTextTheme.primary, // Set text color on buttons to contrast the background
@@ -25,13 +25,13 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(255, 255, 179, 164), // Set background color for ElevatedButton globally
-            foregroundColor: Colors.black,     // Set text color for ElevatedButton (black text)
+            foregroundColor: Colors.black, // Set text color for ElevatedButton (black text)
           ),
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Color.fromARGB(255, 255, 228, 215), // Set AppBar background color to match the scaffold background color
           foregroundColor: Colors.black, // Set text color of AppBar (black text)
-          elevation: 0, // Optional: Remove the shadow under the AppBar
+          elevation: 0, // Optional: Remove the shadow under the AppBar // Remove the back arrow globally
         ),
       ),
       home: MainScreen(),

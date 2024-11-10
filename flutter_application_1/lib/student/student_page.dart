@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/both/chat_page.dart';
 import 'package:flutter_application_1/student/schedule_meeting.dart';
 import 'package:flutter_application_1/student/student_page_grandmas.dart'; 
-import 'package:flutter_application_1/both/student_page_info.dart';
+import 'package:flutter_application_1/both/student_page_info.dart'; // Assuming this is the ElderInfoPage
 import 'package:flutter_application_1/student/student_page_settings.dart';
+import 'package:flutter_application_1/both/elder_page_infob.dart';
 
 class StudentPage1 extends StatefulWidget {
   final int initialSelectedIndex;
@@ -26,7 +27,7 @@ class _StudentPage1State extends State<StudentPage1> {
     }), // Schedule Meeting Page
     StudentPage(), // Opening Hours Page (Index 2)
     Settings(), // Profile page (Settings)
-    InfoPage(), // Location page (Info)
+    ElderInfoPage(), // Update this to the actual ElderInfoPage
   ];
 
   @override
@@ -66,6 +67,7 @@ class _StudentPage1State extends State<StudentPage1> {
     return Scaffold(
       backgroundColor: Color(0xFFC7754F), // Light background color TOP STRIP
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'STUDENT PORTAL',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 import 'package:intl/intl.dart';
 
 class ElderPageSchedule extends StatefulWidget {
+  final Function(Map<String, String>) onSlotPosted;
+
+  const ElderPageSchedule({Key? key, required this.onSlotPosted}) : super(key: key);
+
   @override
   _ElderPageScheduleState createState() => _ElderPageScheduleState();
 }
@@ -10,102 +13,193 @@ class ElderPageSchedule extends StatefulWidget {
 class _ElderPageScheduleState extends State<ElderPageSchedule> {
   DateTime _currentDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  String? _selectedPerson;
+  String _selectedActivity = 'Cooking';
 
-  // Define the current user (example: 'John Doe')
-  final String currentUser = 'John Doe';
+  // List to hold the available slots posted by the elder
+  List<Map<String, String>> availableSlots = [];
 
-  // List of scheduled meetings
-  final List<Map<String, String>> _scheduledMeetings = [
-    {
-      'person': 'John Doe', // This should be replaced with 'You' for the current user
-      'activity': 'Cooking',
-      'date': '2024-11-09',
-      'time': '10:00 AM',
-    },
-    {
-      'person': 'Jane Smith',
-      'activity': 'Fixing Tools',
-      'date': '2024-11-10',
-      'time': '02:00 PM',
-    },
-    // Add more meetings as needed
-  ];
-
-  List<Map<String, String>> _filteredMeetings = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _filterMeetingsForDate(_currentDate); // Filter meetings for the default date
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _currentDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != _currentDate) {
+      setState(() {
+        _currentDate = picked;
+      });
+    }
   }
 
-  // Filter meetings based on the selected date
-  void _filterMeetingsForDate(DateTime selectedDate) {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: _selectedTime,
+    );
+    if (picked != null && picked != _selectedTime) {
+      setState(() {
+        _selectedTime = picked;
+      });
+    }
+  }
+
+  void _postAvailability() {
+    final String formattedDate = DateFormat('yyyy-MM-dd').format(_currentDate);
+    final String formattedTime = _selectedTime.format(context);
+
+    final Map<String, String> slot = {
+      'elder': 'John Doe',  // Replace with the elder's name
+      'activity': _selectedActivity,
+      'date': formattedDate,
+      'time': formattedTime,
+    };
+
+    // Call the parent callback to pass this slot to the student's page
+    widget.onSlotPosted(slot);
+
     setState(() {
-      _filteredMeetings = _scheduledMeetings
-          .where((meeting) => meeting['date'] == formattedDate)
-          .toList();
+      availableSlots.add(slot);
     });
+
+    // Show a confirmation dialog
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Availability Posted', style: TextStyle(fontSize: 22)),
+        content: Text(
+            'You have posted: $formattedDate at $formattedTime for $_selectedActivity', 
+            style: TextStyle(fontSize: 20)), 
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('OK', style: TextStyle(fontSize: 18)),
+          ),
+        ],
+      ),
+    );
   }
 
-  // Replace the current user's name with "You"
-  String _getDisplayName(String person) {
-    return person == currentUser ? 'You' : person;
+  // Method to remove an availability slot
+  void _removeAvailability(Map<String, String> slot) {
+    setState(() {
+      availableSlots.remove(slot);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Schedule'),
+        title: const Text(
+          'Elder Schedule',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Color.fromARGB(255, 255, 228, 215),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(32.0),
         child: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Calendar for selecting a date
-              Container(
-                height: 400,
-                child: CalendarCarousel(
-                  onDayPressed: (DateTime date, List events) {
-                    setState(() {
-                      _currentDate = date;
-                    });
-                    _filterMeetingsForDate(date); // Filter meetings based on selected date
-                  },
-                  thisMonthDayBorderColor: Colors.grey,
-                  selectedDayButtonColor: Colors.green,
-                  selectedDayTextStyle: TextStyle(color: Colors.white),
-                  daysHaveCircularBorder: false,
-                  showOnlyCurrentMonthDate: false,
+              // Date and time selection
+              Row(
+                children: [
+                  const Text('Select Date:', style: TextStyle(fontSize: 24)),
+                  TextButton(
+                    onPressed: () => _selectDate(context),
+                    child: Text(
+                      DateFormat('yyyy-MM-dd').format(_currentDate),
+                      style: TextStyle(fontSize: 22, color: Colors.black), // Change to black
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text('Select Time:', style: TextStyle(fontSize: 24)),
+                  TextButton(
+                    onPressed: () => _selectTime(context),
+                    child: Text(
+                      _selectedTime.format(context),
+                      style: TextStyle(fontSize: 22, color: Colors.black), // Change to black
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 30),
+
+              // Activity Dropdown
+              DropdownButton<String>(
+                value: _selectedActivity,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedActivity = newValue!;
+                  });
+                },
+                items: ['Cooking', 'Teaching', 'Knitting'].map((String activity) {
+                  return DropdownMenuItem<String>(
+                    value: activity,
+                    child: Text(activity, style: TextStyle(fontSize: 22, color: Colors.black)), // Change to black
+                  );
+                }).toList(),
+                style: const TextStyle(fontSize: 22, color: Colors.black), // Set dropdown text to black
+              ),
+
+              const SizedBox(height: 30),
+
+              // Button to post the availability
+              ElevatedButton(
+                onPressed: _postAvailability,
+                child: const Text(
+                  'Post Availability',
+                  style: TextStyle(fontSize: 22),
+                ),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 24),
                 ),
               ),
-              SizedBox(height: 20),
 
-              // Display meetings for the selected date
-              if (_filteredMeetings.isEmpty)
-                Text(
-                  'No meetings scheduled for this day.',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              const SizedBox(height: 50),
+
+              // Display posted availability slots
+              Text(
+                'Posted Availability Slots:',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+
+              // Display the list of availability slots
+              if (availableSlots.isEmpty)
+                const Text(
+                  'No availability slots posted yet.',
+                  style: TextStyle(fontSize: 22),
                 )
               else
-                ..._filteredMeetings.map((meeting) {
+                ...availableSlots.map((slot) {
                   return Card(
                     margin: const EdgeInsets.all(8.0),
+                    elevation: 5,
                     child: ListTile(
-                      title: Text('Meeting with ${_getDisplayName(meeting['person']!)}'),
+                      contentPadding: const EdgeInsets.all(16.0),
+                      title: Text(
+                        '${slot['activity']} on ${slot['date']} at ${slot['time']}',
+                        style: TextStyle(fontSize: 20),
+                      ),
                       subtitle: Text(
-                          '${meeting['activity']} at ${meeting['time']}'),
+                        'Elder: ${slot['elder']}',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.delete, size: 30, color: Colors.red),
+                        onPressed: () => _removeAvailability(slot),
+                      ),
                     ),
                   );
                 }).toList(),
-
-              // Other UI elements for selecting person, time, etc.
             ],
           ),
         ),

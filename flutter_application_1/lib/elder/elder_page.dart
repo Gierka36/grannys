@@ -44,8 +44,26 @@ class ElderPage extends StatelessWidget {
     // Add more students here...
   ];
 
+  // List to hold the scheduled slots
+  List<Map<String, String>> scheduledSlots = [];
+
+  // Handle the slot posted by the elder
+  void _handleSlotPosted(Map<String, String> slot) {
+    scheduledSlots.add(slot);
+    print("Slot Posted: $slot");
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Get screen width and height
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Button width and height based on screen size
+    double buttonWidth = screenWidth * 0.4; // 40% of the screen width
+    double buttonHeight = screenHeight * 0.2; // 20% of the screen height
+    double iconSize = buttonWidth * 0.35; // Icon size based on button width
+
     return MaterialApp(
       title: 'Elder Page',
       theme: ThemeData(
@@ -74,11 +92,17 @@ class ElderPage extends StatelessWidget {
                       Icons.person,
                       'Profile',
                       () => goButton(context, ElderPageProfile()),
+                      buttonWidth,
+                      buttonHeight,
+                      iconSize,
                     ),
                     createIconButton(
                       Icons.calendar_today,
                       'Schedule',
-                      () => goButton(context, ElderPageSchedule()),
+                      () => goButton(context, ElderPageSchedule(onSlotPosted: _handleSlotPosted)),
+                      buttonWidth,
+                      buttonHeight,
+                      iconSize,
                     ),
                   ],
                 ),
@@ -92,11 +116,17 @@ class ElderPage extends StatelessWidget {
                       Icons.info,
                       'Students',
                       () => goButton(context, StudentProfiles()),
+                      buttonWidth,
+                      buttonHeight,
+                      iconSize,
                     ),
                     createIconButton(
                       Icons.location_on,
                       'Location',
                       () => goButton(context, InfoPage()),
+                      buttonWidth,
+                      buttonHeight,
+                      iconSize,
                     ),
                   ],
                 ),
@@ -109,14 +139,20 @@ class ElderPage extends StatelessWidget {
                     createIconButton(
                       Icons.chat_bubble,
                       'Chat',
-                      () => goButton(context, ElderChatPage()),),
+                      () => goButton(context, ElderChatPage()),
+                      buttonWidth,
+                      buttonHeight,
+                      iconSize,
+                    ),
                     createIconButton(
                       Icons.arrow_back,
                       'Go Back',
                       () => goButton(context, MainScreen()),
+                      buttonWidth,
+                      buttonHeight,
+                      iconSize,
                     ),
-
-                ],
+                  ],
                 ),
               ],
             ),
@@ -126,13 +162,11 @@ class ElderPage extends StatelessWidget {
     );
   }
 
-  // Show dialog to choose a studen
-
   // Icon button widget with larger text and icons
-  Widget createIconButton(IconData iconData, String label, VoidCallback onPressed) {
+  Widget createIconButton(IconData iconData, String label, VoidCallback onPressed, double buttonWidth, double buttonHeight, double iconSize) {
     return Container(
-      width: 180, // Increased width for larger buttons
-      height: 180, // Increased height for larger buttons
+      width: buttonWidth, // Use the dynamic width
+      height: buttonHeight, // Use the dynamic height
       decoration: BoxDecoration(
         color: Color.fromARGB(255, 255, 206, 184),
         border: Border.all(color: Color.fromARGB(255, 253, 193, 164), width: 4), // Green border for distinction
@@ -154,7 +188,7 @@ class ElderPage extends StatelessWidget {
             onTap: onPressed,
             child: Icon(
               iconData,
-              size: 100, // Increased icon size for better visibility
+              size: iconSize, // Use dynamic icon size
               color: Color.fromARGB(255, 131, 81, 56),
             ),
           ),
@@ -162,7 +196,7 @@ class ElderPage extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 24, // Larger font size for better readability
+              fontSize: 20, // Adjust text size slightly smaller for better fit
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 131, 81, 56),
             ),
