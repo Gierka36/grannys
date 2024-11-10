@@ -155,7 +155,7 @@ class ElderPage extends StatelessWidget {
             child: Icon(
               iconData,
               size: 100, // Increased icon size for better visibility
-              color: Color.fromARGB(255, 131, 81, 56)
+              color: Color.fromARGB(255, 131, 81, 56),
             ),
           ),
           const SizedBox(height: 10),

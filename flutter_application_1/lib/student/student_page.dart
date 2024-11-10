@@ -43,6 +43,24 @@ class _StudentPage1State extends State<StudentPage1> {
     });
   }
 
+  // Helper function to create Bottom Navigation items with borders
+  Widget _createNavItem(IconData icon, String label, bool isSelected) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Color.fromARGB(255, 253, 193, 164), // Border color
+          width: isSelected ? 6 : 2, // Thicker border when selected
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.all(6),
+      child: Icon(
+        icon,
+        color: isSelected ? Colors.grey : Color.fromARGB(255, 255, 206, 184),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,30 +76,30 @@ class _StudentPage1State extends State<StudentPage1> {
       ),
       body: _pages[_selectedIndex], // Display the selected page
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFFC7754F), // Bottom nav bar color
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 131, 81, 56), // Bottom nav bar color
+        selectedItemColor: Colors.grey,
+        unselectedItemColor: Color.fromARGB(255, 255, 206, 184),
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat_bubble),
+            icon: _createNavItem(Icons.chat_bubble, 'Chat', _selectedIndex == 0),
             label: 'Chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
+            icon: _createNavItem(Icons.calendar_today, 'Schedule', _selectedIndex == 1),
             label: 'Schedule',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info),
-            label: 'Elderly', // This button leads to the StudentPage
+            icon: _createNavItem(Icons.info, 'Elderly', _selectedIndex == 2),
+            label: 'Elderly',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: _createNavItem(Icons.person, 'Profile', _selectedIndex == 3),
             label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on),
+            icon: _createNavItem(Icons.location_on, 'Location', _selectedIndex == 4),
             label: 'Location',
           ),
         ],
